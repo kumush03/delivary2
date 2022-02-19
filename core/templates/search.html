@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Basket {% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+
+
+
+ <h2>{{search_prod}}</h2>
+ <h2>вы искали:<b>{{search_prod}}</b></h2>
+
+
+
+ <div class="container d-flex justify-content-around">
+    {% for product in products %}
+    <div class="card mt-5" style="width: 18rem;">
+
+      {% if product.image.url %}
+      <img src="{{ product.image.url }}" class="card-img-top" alt="jpeg">
+      {% endif %}
+      <div class="card-body">
+<!--          <a href="product/{{foodcard.id}}" class="card-title text-decoration-none fw-bold text-dark">{{ foodcard.name }}</a>-->
+        <a href="{% url 'product' id=product.id %}" class="card-title text-decoration-none fw-bold text-dark">{{ product.name }}</a>
+
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text fst-italic">{{ product.price }} сом</p>
+        <a href="{% url 'addCart' pk=product.id %}" class="btn btn-primary">Добавить в корзину</a>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+{% endblock %}
