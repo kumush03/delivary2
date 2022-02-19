@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect,render
 from core.models import FoodCard, Category, Productscart
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 def base(request):
@@ -30,73 +31,35 @@ rer={}
 c = 0
 def addCart(request, pk):
     cart_session = request.session.get('cart_session', [])
-    print(cart_session)
-    cart_products.append(pk)
-    products_cart = FoodCard.objects.filter(id__in=cart_products)
-    # print(products_cart)
-    for i in products_cart:
-        p_name=(i.name)
-        p_count=(cart_products.count(i.id))
-        p_description=(i.description)
-        total_sum = cart_products.count(i.id) * i.price
-        # print(total_sum)
-        # print(i.price)
-    context ={'p_name':p_name,'p_count':p_count,'p_description':p_description,'total_sum':total_sum,'':products_cart}    
-        
-
-
-    for i in cart_products:
-        if i in rer:
-            rer[i] +=1
-        else:
-            rer[i] = 1
-    print(cart_products)
-    print('sd',rer[pk])
-    product = FoodCard.objects.get(id=pk)
-    product_cart = Productscart()
-    # product_cart =User
-    product_cart.products = product.name
-    product_cart.photo = product.image.url
-    product_cart.price = product.price
-    product_cart.count = rer[pk]
-    product_cart.total_sum = product_cart.price  * product_cart.count
-    product_cart.save()
-    
-    
-    return HttpResponseRedirect('/')
+    # print(cart_session)
+    cart_session.append(pk)
+    request.session['cart_session']=cart_session
+    return redirect('base')
 
 
 def cart(request):
 
-    # cart_session = request.session.get('cart_session', [])
-    # print(cart_session)
-    count_of_product = len(request.session['cart_session'])
+    cart_session = request.session.get('cart_session', [])
+    count_of_product = len(cart_session)
         
-    # print(count_of_product)
-    products_cart = FoodCard.objects.filter(id__in=cart_products)
-    # print(products_cart)
-    # print(cart_products)
+    products_cart = FoodCard.objects.filter(id__in=cart_session)
+    
     all_products_sum = 0
     for i in products_cart:
+        i.count = cart_session.count(i.id)
+        i.sum = i.count * i.price
+        all_products_sum +=i.sum
+    return render (request,'cart.html',{'products':products_cart,'count_of_product':count_of_product,'all_products_sum':all_products_sum})
 
-        i.count=cart_products.count(i.id)
-        i.sum = cart_products.count(i.id) * i.price
-        all_products_sum += i.sum
-    context ={'products_cart':products_cart,'all_products_sum':all_products_sum,'count_of_product':count_of_product}   
-        
-
-
-    return render(request, 'cart.html',context=context)
 
 def removecart(request,id):
-    cart_session = request.session.get('cart_session', [])
-    print(cart_session)
+    cart = request.session.get('cart_session', [])
     carts=[]
 
 
-    for i in cart_session:
-        if id != i:
-            carts.append(i)
+    for pk in cart:
+        if pk != id:
+            carts.append(pk)
     request.session['cart_session'] = carts
     return redirect ('cart')
     
@@ -113,3 +76,18 @@ def search(request):
         print(product)
         # print(product.price)
     return render (request, 'search.html',{'search_prod':search_prod,'products':products})
+
+def sign_up(request):
+    if request.method == 'POST':
+        user = UserCreationForm(request.POST)
+        if user.is_valid():
+            user.save()
+            return redirect('base')
+    
+    
+    
+    
+    else:
+        user = UserCreationForm()
+        
+    return render(request,'auth.html',{'user':user})
