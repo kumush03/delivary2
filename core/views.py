@@ -4,7 +4,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect,render
 from core.models import FoodCard, Category, Productscart
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth import login,authenticate,logout
 
 # Create your views here.
 def base(request):
@@ -34,7 +35,7 @@ def addCart(request, pk):
     # print(cart_session)
     cart_session.append(pk)
     request.session['cart_session']=cart_session
-    return redirect('base')
+    return redirect('base') 
 
 
 def cart(request):
@@ -91,3 +92,24 @@ def sign_up(request):
         user = UserCreationForm()
         
     return render(request,'auth.html',{'user':user})
+def sign_in(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user =authenticate(request,username=username,password=password)
+
+
+        if user is not None:
+            login(request,user)
+            return redirect('base')
+
+    else:
+        form = AuthenticationForm()
+    return render(request,'auth.html',{'user' :form})    
+
+def sign_out(request):
+    logout(request)
+    return redirect('base')
+
+def order(request):
+    return()

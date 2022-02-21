@@ -52,7 +52,7 @@
       <div class="card mt-5" style="width: 18rem;">
         
         <!-- {% if foodcard.image.url %} -->
-        <img src="{{ foodcard.image.url }}" class="card-img-top" alt="jpeg">
+        <img src="{{ foodcard.image.url }}"  class="card-img-top" alt="jpeg">
         <!-- {% endif %} -->
         <div class="card-body">
           <!--          <a href="product/{{foodcard.id}}" class="card-title text-decoration-none fw-bold text-dark">{{ foodcard.name }}</a>-->
@@ -60,6 +60,8 @@
           
           <p class="card-text">{{ foodcard.description }}</p>
           <p class="card-text fst-italic">{{ foodcard.price }} сом</p>
+          <a href="{% url 'addCart' pk=foodcard.id %}" class="btn btn-primary">+</a>
+
           <a href="{% url 'addCart' pk=foodcard.id %}" class="btn btn-primary">Добавить в корзину</a>
         </div>
        

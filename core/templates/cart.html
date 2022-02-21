@@ -73,14 +73,68 @@
         </div>
         <div class="row mt-4 d-flex align-items-center">
             <div class="col-sm-6 order-md-2 text-right">
-                <a href="catalog.html" class="btn btn-primary mb-4 btn-lg pl-5 pr-5">Checkout</a>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Оформить заказ
+                  </button>
             </div>
             <div class="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
                 <a href="/#products">
                     <i class="fas fa-arrow-left mr-2"></i> Продолжить покупки</a>
+                
+                   
+                   
             </div>
+           
+        <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+            <form action="{% url 'order' %}"method="POST">
+                {%% csrf_token }
+                <div class="mb-3">
+                  <!-- <label for="recipient-name" class="col-form-label">Введите имя</label> -->
+                  <input placeholder="Ваша имя" type="text" class="form-control" required id="recipient-name" name="c_name">
+                </div>
+                <div class="mb-3">
+                    <!-- <label for="recipient-name" class="col-form-label">Ваша фамилия</label> -->
+                    <input placeholder="Ваша фамилия" type="text" class="form-control" id="recipient-name" name="c_lname">
+                  </div>
+                  <div class="mb-3">
+                    <!-- <label for="recipient-name" class="col-form-label">Ваш номер</label> -->
+                    <input placeholder="Ваш номер" type="text" class="form-control" id="recipient-name"name="c_number">
+                  </div>
+                  <div class="mb-3">
+                    <!-- <label for="recipient-name" class="col-form-label">Сообщение</label> -->
+                    <textarea placeholder="Сообщение" type="text" class="form-control" id="recipient-name" name="c_message"></textarea>
+                  </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Message:</label>
+                  <textarea class="form-control" id="message-text"></textarea>
+                </div>
+              </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </div>
+      </div>
     </div>
+  </div>
+     
+        </div>
+
+            
+            
+        
 </section>
 
 
