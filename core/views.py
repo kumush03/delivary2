@@ -2,10 +2,11 @@ from sre_constants import CATEGORY_NOT_SPACE
 from unicodedata import category
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect,render
-from core.models import FoodCard, Category, Productscart
+from core.models import Customer, FoodCard, Category, Order
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login,authenticate,logout
+from django.contrib import messages
 
 # Create your views here.
 def base(request):
@@ -111,5 +112,62 @@ def sign_out(request):
     logout(request)
     return redirect('base')
 
+# def order(request):
+#     if request.method == 'POST':
+#         cart_session = request.session.get('cart_session ',[])
+#         if len(cart_session) == 0:
+#             messages.error(request, "Ваша корзина пустая", extra_tags='dark')
+#             return redirect('cart')
+#         else:  
+#             customer = Customer()
+#             customer.name = request.POST.get('c_name')
+#             customer.last_name = request.POST.get('c_lname')
+#             customer.number = request.POST.get('c_number')
+#             customer.address = request.POST.get('c_address')
+#             customer.message = request.POST.get('c_message')
+#             customer.save()
+
+            # for i in range(len(cart_session)):
+            #     order = Order()
+            #     order.product = FoodCard.objects.get(id=cart_session[i])
+            #     order.customer = customer
+            #     order.price = order.product.price
+            #     order.phone = customer.number
+            #     order.address = customer.address
+            #     order.save()
+
+
+            # request.session['cart_session'] = []
+            # messages.error(request,'Заказ успешно отправлено!',extra_tags='dark' )
+
+            # return redirect('cart')
+
 def order(request):
-    return()
+    if request.method == 'POST':
+        cart_session = request.session.get('cart_session', [])
+        if len(cart_session) == 0:
+            messages.error(request, 'Ваша корзина пустая!!!', extra_tags='danger')
+            return redirect('cart')
+        else:
+            customer = Customer()
+            customer.name = request.POST.get('c_name')
+            customer.last_name = request.POST.get('c_lname')
+            customer.number = request.POST.get('c_number')
+            customer.address = request.POST.get('c_address')
+            customer.message = request.POST.get('c_message')
+            customer.save()
+                                # 1, 2 
+            for i in range(len(cart_session)): 
+                order = Order()
+                order.product = FoodCard.objects.get(id=cart_session[i])
+                order.customer = customer
+                order.price = order.product.price
+                order.phone = customer.number
+                order.address = customer.address
+                order.save()
+
+            request.session['cart_session'] = []
+            messages.error(request, 'Заказ успешно отправлено!', extra_tags='success')
+
+            return redirect('cart')
+        

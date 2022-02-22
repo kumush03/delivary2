@@ -73,10 +73,24 @@
         </div>
         <div class="row mt-4 d-flex align-items-center">
             <div class="col-sm-6 order-md-2 text-right">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Оформить заказ
-                  </button>
+                </a>
             </div>
+
+           {% if messages %}
+           {% for message in messages %}
+           <div class="alert alert-{{message.extra_tags}} d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+            <div>
+              {{ message }}
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+
+
+
             <div class="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
                 <a href="/#products">
                     <i class="fas fa-arrow-left mr-2"></i> Продолжить покупки</a>
@@ -84,7 +98,9 @@
                    
                    
             </div>
-           
+        </div>
+</section>
+
         <!-- Button trigger modal -->
 
   
@@ -97,8 +113,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="{% url 'order' %}"method="POST">
-                {%% csrf_token }
+            <form action="{% url 'order' %}" method="POST">ss
+                {% csrf_token %}
                 <div class="mb-3">
                   <!-- <label for="recipient-name" class="col-form-label">Введите имя</label> -->
                   <input placeholder="Ваша имя" type="text" class="form-control" required id="recipient-name" name="c_name">
@@ -112,30 +128,34 @@
                     <input placeholder="Ваш номер" type="text" class="form-control" id="recipient-name"name="c_number">
                   </div>
                   <div class="mb-3">
+                    <!-- <label for="recipient-name" class="col-form-label">Ваш номер</label> -->
+                    <input placeholder="Ваш адрес" type="text" class="form-control" id="recipient-name"name="c_address">
+                  </div>
+                  <div class="mb-3">
                     <!-- <label for="recipient-name" class="col-form-label">Сообщение</label> -->
                     <textarea placeholder="Сообщение" type="text" class="form-control" id="recipient-name" name="c_message"></textarea>
                   </div>
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                   <label for="message-text" class="col-form-label">Message:</label>
-                  <textarea class="form-control" id="message-text"></textarea>
-                </div>
+                  <textarea class="form-control" id="message-text"></textarea> -->
+                <!-- </div> -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                  </div>
               </form>
         </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-          <button type="submit" class="btn btn-primary">Отправить</button>
-        </div>
+       
       </div>
     </div>
   </div>
      
-        </div>
+ <!-- </div> -->
 
             
             
         
-</section>
 
 
 {% endblock %}
